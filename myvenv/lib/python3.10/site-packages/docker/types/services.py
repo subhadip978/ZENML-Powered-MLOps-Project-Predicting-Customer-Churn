@@ -1,8 +1,12 @@
 from .. import errors
 from ..constants import IS_WINDOWS_PLATFORM
 from ..utils import (
-    check_resource, format_environment, format_extra_hosts, parse_bytes,
-    split_command, convert_service_networks,
+    check_resource,
+    convert_service_networks,
+    format_environment,
+    format_extra_hosts,
+    parse_bytes,
+    split_command,
 )
 
 
@@ -370,8 +374,8 @@ def _convert_generic_resources_dict(generic_resources):
         return generic_resources
     if not isinstance(generic_resources, dict):
         raise errors.InvalidArgument(
-            'generic_resources must be a dict or a list'
-            ' (found {})'.format(type(generic_resources))
+            'generic_resources must be a dict or a list '
+            f'(found {type(generic_resources)})'
         )
     resources = []
     for kind, value in generic_resources.items():
@@ -381,9 +385,9 @@ def _convert_generic_resources_dict(generic_resources):
         elif isinstance(value, str):
             resource_type = 'NamedResourceSpec'
         else:
+            kv = {kind: value}
             raise errors.InvalidArgument(
-                'Unsupported generic resource reservation '
-                'type: {}'.format({kind: value})
+                f'Unsupported generic resource reservation type: {kv}'
             )
         resources.append({
             resource_type: {'Kind': kind, 'Value': value}
@@ -764,8 +768,8 @@ class PlacementPreference(dict):
     def __init__(self, strategy, descriptor):
         if strategy != 'spread':
             raise errors.InvalidArgument(
-                'PlacementPreference strategy value is invalid ({}):'
-                ' must be "spread".'.format(strategy)
+                f'PlacementPreference strategy value is invalid ({strategy}): '
+                'must be "spread".'
             )
         self['Spread'] = {'SpreadDescriptor': descriptor}
 

@@ -1,12 +1,11 @@
-import requests.adapters
 import socket
 
-from docker.transport.basehttpadapter import BaseHTTPAdapter
-from .. import constants
-
+import requests.adapters
 import urllib3
 import urllib3.connection
 
+from .. import constants
+from .basehttpadapter import BaseHTTPAdapter
 
 RecentlyUsedContainer = urllib3._collections.RecentlyUsedContainer
 
@@ -55,7 +54,7 @@ class UnixHTTPAdapter(BaseHTTPAdapter):
                  max_pool_size=constants.DEFAULT_MAX_POOL_SIZE):
         socket_path = socket_url.replace('http+unix://', '')
         if not socket_path.startswith('/'):
-            socket_path = '/' + socket_path
+            socket_path = f"/{socket_path}"
         self.socket_path = socket_path
         self.timeout = timeout
         self.max_pool_size = max_pool_size

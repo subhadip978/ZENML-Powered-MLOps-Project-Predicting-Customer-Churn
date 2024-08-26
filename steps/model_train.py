@@ -1,5 +1,6 @@
 import logging
 import pandas as pd 
+import numpy as np
 from zenml import step
 from sklearn.base import RegressorMixin
 from .config import ModelNameConfig
@@ -16,8 +17,8 @@ experiment_tracker=Client().active_stack.experiment_tracker
 
 
 @step(experiment_tracker=experiment_tracker.name)
-def train_model(X_train:pd.DataFrame,
-                X_test:pd.DataFrame,
+def train_model(X_train:np.ndarray,
+                X_test:np.ndarray,
                 y_train: pd.Series,
                 y_test: pd.Series,
                 config: ModelNameConfig,)-> RegressorMixin:

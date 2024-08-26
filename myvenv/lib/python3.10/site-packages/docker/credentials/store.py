@@ -4,8 +4,7 @@ import shutil
 import subprocess
 import warnings
 
-from . import constants
-from . import errors
+from . import constants, errors
 from .utils import create_environment_dict
 
 
@@ -20,9 +19,8 @@ class Store:
         self.environment = environment
         if self.exe is None:
             warnings.warn(
-                '{} not installed or not available in PATH'.format(
-                    self.program
-                )
+                f'{self.program} not installed or not available in PATH',
+                stacklevel=1,
             )
 
     def get(self, server):
@@ -73,10 +71,8 @@ class Store:
     def _execute(self, subcmd, data_input):
         if self.exe is None:
             raise errors.StoreError(
-                    '{} not installed or not available in PATH'.format(
-                        self.program
-                    )
-                )
+                f'{self.program} not installed or not available in PATH'
+            )
         output = None
         env = create_environment_dict(self.environment)
         try:
@@ -84,18 +80,14 @@ class Store:
                 [self.exe, subcmd], input=data_input, env=env,
             )
         except subprocess.CalledProcessError as e:
-            raise errors.process_store_error(e, self.program)
+            raise errors.process_store_error(e, self.program) from e
         except OSError as e:
             if e.errno == errno.ENOENT:
                 raise errors.StoreError(
-                    '{} not installed or not available in PATH'.format(
-                        self.program
-                    )
-                )
+                    f'{self.program} not installed or not available in PATH'
+                ) from e
             else:
                 raise errors.StoreError(
-                    'Unexpected OS error "{}", errno={}'.format(
-                        e.strerror, e.errno
-                    )
-                )
+                    f'Unexpected OS error "{e.strerror}", errno={e.errno}'
+                ) from e
         return output

@@ -1,10 +1,9 @@
-import os
-import json
 import hashlib
+import json
+import os
 
 from docker import utils
-from docker.constants import IS_WINDOWS_PLATFORM
-from docker.constants import DEFAULT_UNIX_SOCKET
+from docker.constants import DEFAULT_UNIX_SOCKET, IS_WINDOWS_PLATFORM
 from docker.utils.config import find_config_file
 
 METAFILE = "meta.json"
@@ -77,5 +76,6 @@ def get_context_host(path=None, tls=False):
     host = utils.parse_host(path, IS_WINDOWS_PLATFORM, tls)
     if host == DEFAULT_UNIX_SOCKET:
         # remove http+ from default docker socket url
-        return host.strip("http+")
+        if host.startswith("http+"):
+            host = host[5:]
     return host

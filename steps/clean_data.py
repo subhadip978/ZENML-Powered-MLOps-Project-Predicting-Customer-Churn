@@ -1,5 +1,6 @@
 import logging
 import pandas as pd
+import numpy as np
 from typing import Tuple
 from zenml import step
 
@@ -14,8 +15,8 @@ from src.data_cleaning import (
 
 
 @step
-def clean_df(df:pd.DataFrame)->Tuple[Annotated[pd.DataFrame,"X_train"],
-                                     Annotated[pd.DataFrame,"X_test"],
+def clean_df(df:pd.DataFrame)->Tuple[Annotated[np.ndarray,"X_train"],
+                                     Annotated[np.ndarray,"X_test"],
                                     Annotated[pd.Series,"y_train"],
                                     Annotated[pd.Series,"y_test"],]:
      

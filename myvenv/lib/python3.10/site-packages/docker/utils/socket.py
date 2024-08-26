@@ -42,7 +42,7 @@ def read(socket, n=4096):
     try:
         if hasattr(socket, 'recv'):
             return socket.recv(n)
-        if isinstance(socket, getattr(pysocket, 'SocketIO')):
+        if isinstance(socket, pysocket.SocketIO):
             return socket.read(n)
         return os.read(socket.fileno(), n)
     except OSError as e:
@@ -64,7 +64,7 @@ def read_exactly(socket, n):
     Reads exactly n bytes from socket
     Raises SocketError if there isn't enough data
     """
-    data = bytes()
+    data = b""
     while len(data) < n:
         next_data = read(socket, n - len(data))
         if not next_data:
@@ -152,7 +152,7 @@ def consume_socket_output(frames, demux=False):
     if demux is False:
         # If the streams are multiplexed, the generator returns strings, that
         # we just need to concatenate.
-        return bytes().join(frames)
+        return b"".join(frames)
 
     # If the streams are demultiplexed, the generator yields tuples
     # (stdout, stderr)
